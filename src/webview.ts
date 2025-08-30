@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 import * as fs from 'fs';
 
 const INLINE_THRESHOLD = 5 * 1024; // 5 KB
@@ -15,6 +14,7 @@ export async function buildWebviewContent(document: vscode.TextDocument, panel: 
     const regex = /(href|src)=["'](.+?)["']/g;
     html = html.replace(regex, (_, attr, srcPath) => {
         try {
+            // joinPath and asWebviewUri are available in @types/vscode >=1.56
             const fileUri = vscode.Uri.joinPath(workspaceFolder.uri, srcPath);
             assetsToWatch.push(fileUri);
 

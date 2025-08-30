@@ -5,7 +5,8 @@
     "outDir": "out",
     "lib": ["ES2022", "DOM"],
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "types": ["node", "vscode"]
   },
   "include": ["src/**/*.ts"]
 }
