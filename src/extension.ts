@@ -16,7 +16,6 @@ export function activate(context: vscode.ExtensionContext) {
             );
 
             panel.webview.html = await buildWebviewContent(editor.document, panel);
-
             setupWatcher(panel, context);
         })
     );

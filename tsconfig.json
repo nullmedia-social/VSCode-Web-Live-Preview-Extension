@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "module": "es2022",
-    "target": "es2022",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "outDir": "out",
-    "lib": ["ES2022", "DOM"],
-    "sourceMap": true,
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "types": ["vscode"]
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "declaration": false
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src"],
+  "exclude": ["node_modules", "out"]
 }

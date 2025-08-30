@@ -2,7 +2,7 @@
   "name": "web-live-preview",
   "displayName": "Web Live Preview",
   "description": "Multi-file Live Preview extension for vscode.dev",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "publisher": "kingnullboy",
   "engines": { "vscode": "^1.78.0" },
   "browser": "./out/extension.js",
