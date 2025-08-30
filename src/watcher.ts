@@ -1,21 +1,25 @@
 import * as vscode from 'vscode';
 
 export function setupWatcher(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
-    const watcher = vscode.workspace.createFileSystemWatcher('**/*.{html,css,js,png,jpg,svg}');
+    const fileTimers: Map<string, NodeJS.Timeout> = new Map();
 
-    const reload = async (uri: vscode.Uri) => {
-        panel.webview.postMessage({ type: 'reload', uri: uri.toString() });
+    const reload = (uri: vscode.Uri) => {
+        if (fileTimers.has(uri.fsPath)) clearTimeout(fileTimers.get(uri.fsPath)!);
+        fileTimers.set(uri.fsPath, setTimeout(() => {
+            panel.webview.postMessage({ type: 'reload', uri: uri.toString() });
+            fileTimers.delete(uri.fsPath);
+        }, 250)); // 250ms debounce
     };
 
+    const watcher = vscode.workspace.createFileSystemWatcher('**/*.{html,css,js,png,jpg,svg}');
     watcher.onDidChange(reload);
     watcher.onDidCreate(reload);
     watcher.onDidDelete(reload);
 
     // Optional: live typing reload
     const changeSub = vscode.workspace.onDidChangeTextDocument(event => {
-        if (event.document.uri.fsPath.endsWith('.html') || event.document.uri.fsPath.endsWith('.css') || event.document.uri.fsPath.endsWith('.js')) {
-            panel.webview.postMessage({ type: 'reload', uri: event.document.uri.toString() });
-        }
+        const ext = event.document.uri.fsPath.split('.').pop();
+        if (['html','css','js'].includes(ext!)) reload(event.document.uri);
     });
 
     context.subscriptions.push(watcher, changeSub);
